@@ -1,0 +1,46 @@
+{
+  "resources":{
+  "includes":[{
+    "pattern":"\\QMETA-INF/services/com.sun.source.util.Plugin\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.lang.System$LoggerFinder\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"
+  }, {
+    "pattern":"\\QMETA-INF/services/javax.annotation.processing.Processor\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/compiler_en.properties\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/compiler_en_US.properties\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/javac_en.properties\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/javac_en_US.properties\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/launcher_en.properties\\E"
+  }, {
+    "pattern":"\\Qcom/sun/tools/javac/resources/launcher_en_US.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/compiler_en.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/compiler_en_US.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/javac_en.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/javac_en_US.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/launcher_en.properties\\E"
+  }, {
+    "pattern":"jdk.compiler:\\Qcom/sun/tools/javac/resources/launcher_en_US.properties\\E"
+  }]},
+  "bundles":[{
+    "name":"com.sun.tools.javac.resources.compiler",
+    "locales":["en-US"]
+  }, {
+    "name":"com.sun.tools.javac.resources.javac",
+    "locales":["en-US"]
+  }, {
+    "name":"com.sun.tools.javac.resources.launcher",
+    "locales":["en-US"]
+  }]
+}

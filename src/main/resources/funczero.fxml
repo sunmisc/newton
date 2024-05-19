@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="1200.0"
+      xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.Controller">
+    <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512"
+               focusTraversable="true"
+               VBox.vgrow="ALWAYS">
+        <AnchorPane prefWidth="257.0">
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0"
+                   style="&#10;"
+                   textAlignment="CENTER">
+                <font>
+                    <Font size="18.0" fx:id="x1"/>
+                </font>
+                <textFill>
+                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
+                </textFill>
+            </Label>
+            <Button fx:id="calculateButton"
+                    layoutX="14.0"
+                    layoutY="536.0"
+                    mnemonicParsing="false"
+                    onAction="#calculateClick"
+                    text="Выполнить"
+                    AnchorPane.bottomAnchor="15.0"
+                    AnchorPane.leftAnchor="14.0"/>
+            <GridPane layoutX="15.0" layoutY="75.0" prefHeight="271.0" prefWidth="268.0"
+                      AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES"
+                                       maxWidth="123.7999984741211"
+                                       minWidth="10.0"
+                                       prefWidth="123.7999984741211"/>
+                    <ColumnConstraints hgrow="SOMETIMES"
+                                       maxWidth="155.0000030517578"
+                                       minWidth="10.0"
+                                       prefWidth="122.2000015258789"/>
+                    <ColumnConstraints hgrow="SOMETIMES"
+                                       maxWidth="98.4"
+                                       minWidth="10.0"
+                                       prefWidth="21.59998474121096"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <TextField fx:id="derivative"
+                           prefHeight="26.0"
+                           prefWidth="66.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+                <TextField fx:id="epsilon"
+                           prefHeight="26.0"
+                           prefWidth="66.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="2"/>
+                <Label text="epsilon:" GridPane.rowIndex="2"/>
+                <Label text="max итераций:" GridPane.rowIndex="3"/>
+                <TextField fx:id="function"
+                           prefHeight="18.0"
+                           prefWidth="58.0"
+                           GridPane.columnIndex="1"/>
+                <TextField fx:id="maxIteration"
+                           prefHeight="18.0"
+                           prefWidth="42.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="3"/>
+                <Label text="функция"/>
+                <Label text="производная (опционально)" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets/>
+                    </GridPane.margin>
+                </Label>
+                <Label text="начальная точка (опционально):" GridPane.rowIndex="4"/>
+                <TextField fx:id="approximation"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="4"/>
+            </GridPane>
+        </AnchorPane>
+        <ScrollPane>
+            <AnchorPane id="Content" prefHeight="562.0" prefWidth="590.0">
+                <LineChart fx:id="funcChart"
+                           layoutX="-1.0"
+                           layoutY="97.0"
+                           prefHeight="445.0"
+                           prefWidth="444.0"
+                           AnchorPane.bottomAnchor="1.0"
+                           AnchorPane.leftAnchor="1.0"
+                           AnchorPane.rightAnchor="1.0"
+                           AnchorPane.topAnchor="39.0">
+                    <xAxis>
+                        <NumberAxis side="BOTTOM" fx:id="xAxis"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="yAxis" side="LEFT"/>
+                    </yAxis>
+                </LineChart>
+            </AnchorPane>
+        </ScrollPane>
+        <AnchorPane>
+            <Label alignment="CENTER"
+                   font="$x1" layoutX="14.0"
+                   layoutY="14.0"
+                   style="&#10;"
+                   text="Расчеты"
+                   textAlignment="CENTER" textFill="$x2"/>
+            <TextArea fx:id="logTextArea"
+                      editable="false"
+                      layoutX="11.0"
+                      layoutY="41.0"
+                      maxHeight="1.7976931348623157E308"
+                      maxWidth="1.7976931348623157E308"
+                      prefHeight="522.0"
+                      prefWidth="277.0"
+                      AnchorPane.bottomAnchor="15.0"
+                      AnchorPane.leftAnchor="11.0"
+                      AnchorPane.rightAnchor="11.0"
+                      AnchorPane.topAnchor="38.60000000000002"/>
+        </AnchorPane>
+    </SplitPane>
+</VBox>

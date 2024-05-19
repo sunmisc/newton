@@ -1,0 +1,16 @@
+[
+{
+  "name":"java.lang.ClassLoader",
+  "fields":[{"name":"classLoaderValueMap"}]
+},
+{
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
+},
+{
+  "name":"jdk.internal.jrtfs.JrtFileSystemProvider"
+},
+{
+  "name":"jdk.internal.misc.Unsafe"
+}
+]
