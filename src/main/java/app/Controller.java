@@ -135,6 +135,8 @@ public class Controller {
         double step = (to - from) / 100;
         for (double x = from; x < to; x += step) {
             double y = func.applyAsDouble(x);
+            if (Double.isNaN(y))
+                continue;
             series.getData().add(new XYChart.Data<>(x, y));
         }
 

@@ -1,5 +1,7 @@
 package sunmisc.nonlinear.parser.nodes;
 
+import sunmisc.nonlinear.parser.Tokenized;
+
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
@@ -37,22 +39,22 @@ public final class Parsed implements Node {
     private Node parse() {
         Queue<String> queue = new ArrayDeque<>();
         tokens.forEach(queue::add);
-        return parse(queue);
+        return next(queue);
     }
-    private Node parse(Queue<String> tokens) {
-        Node node = parseFactor(tokens);
+    private Node next(Queue<String> tokens) {
+        Node node = unary(tokens);
 
         while (!tokens.isEmpty()) {
             String first = tokens.peek();
             switch (first) {
                 case "+", "-" -> {
                     String operator = tokens.remove(); // and free
-                    Node right = parse(tokens);
+                    Node right = next(tokens);
                     node = new OperatorNode(operator, node, right);
                 }
-                case "*", "/", "^" -> {
+                case "*", "/", "^"  -> {
                     String operator = tokens.remove();
-                    Node right = parseFactor(tokens);
+                    Node right = unary(tokens);
                     node = new OperatorNode(operator, node, right);
                 }
                 default -> { return node; }
@@ -60,20 +62,43 @@ public final class Parsed implements Node {
         }
         return node;
     }
-
-    private Node parseFactor(Queue<String> tokens) {
+    private Node unary(Queue<String> tokens) {
         String token = tokens.remove();
 
         switch (token) {
-            case "(", ")" -> {
-                Node node = parse(tokens);
-                tokens.remove(); // free
-                return node;
+            case "(" -> {
+                try {
+                    return next(tokens);
+                } finally {
+                    tokens.remove(); // )
+                }
+            }
+            case "sin" -> {
+                return new SinNode(unary(tokens));
+            }
+            case "cos" -> {
+                return new CosNode(unary(tokens));
+            }
+            case "log" -> {
+                return new LogNode(unary(tokens));
             }
             default -> {
                 Node val = param.get(token);
                 return val != null ? val : new NumberNode(token);
             }
         }
+    }
+    public static void main(String[] args) {
+        double x = 1222;
+        String expression = "x^(log(x))";
+        Parsed parsed1 = new Parsed(
+                Map.of("x", new NumberNode(x)),
+                new Tokenized(() -> expression)
+        );
+
+
+        double a = parsed1.evaluate();
+        double b = Math.pow(x, Math.log(x));
+        System.out.println(a + " " + b);
     }
 }

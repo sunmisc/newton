@@ -1,3 +1,6 @@
+package sunmisc;
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import sunmisc.nonlinear.parser.MultiplicationSign;
 import sunmisc.nonlinear.parser.Tokenized;
@@ -8,6 +11,8 @@ import sunmisc.nonlinear.parser.nodes.Parsed;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleUnaryOperator;
+
+import static java.lang.Math.*;
 
 @Test
 public class ParsedTest {
@@ -22,11 +27,10 @@ public class ParsedTest {
                         )
                 )
         );
-        double x = node.evaluate();
-        double y = Math.pow(2, (6*3-1)) +23/3D * 12 + 1 / 2D;
+        double a = node.evaluate();
+        double b = Math.pow(2, (6*3-1)) +23/3D * 12 + 1 / 2D;
 
-        if (x != y)
-            throw new AssertionError();
+        Assert.assertEquals(a, b);
     }
     @Test
     public void test2() {
@@ -45,21 +49,53 @@ public class ParsedTest {
 
         double q = a.applyAsDouble(x);
         double u = b.applyAsDouble(x);
-        if (q != u)
-            throw new AssertionError(q + " != " + u);
+        Assert.assertEquals(q, u);
     }
     @Test
     public void test3() {
         String text = "8384*33333+(333/1222*399 * (2+3*(3+2)))";
-        double q = new Parsed(
+        double a = new Parsed(
                 new Tokenized(
                         new MultiplicationSign(
                                 () -> text
                         )
                 )
         ).evaluate();
-        double u = 8384*33333+(333/1222D*399 * (2+3*(3+2D)));
-        if (q != u)
-            throw new AssertionError(q + " != " + u);
+        double b = 8384*33333+(333/1222D*399 * (2+3*(3+2D)));
+        Assert.assertEquals(a, b);
+    }
+    @Test
+    public void test4() {
+        double x = 1222;
+        String expression = """
+                            3 * (3 + (33 + (8 *(3+22*22+(sin(2)))/ 3) * 2) * 3) + 2 +
+                            log(x*(2 + 1))^(2+44+(2*3)+(x+1+(3+2)))
+                            """;
+        Parsed parsed1 = new Parsed(
+                Map.of("x", new NumberNode(x)),
+                new Tokenized(() -> expression)
+        );
+
+
+        double a = parsed1.evaluate();
+        double b = 3 * (3 + (33 + (8 *(3+22*22+(sin(2)))/ 3) * 2) * 3) + 2 + pow(
+                log(x * (2 + 1)), 2+44+(2*3)+(x+1+(3+2)));
+
+        Assert.assertEquals(a, b);
+    }
+    @Test
+    public void test5() {
+        double x = 1222;
+        String expression = "x^(log(x))";
+        double a = new Parsed(
+                Map.of("x", new NumberNode(x)),
+                new Tokenized(
+                        new MultiplicationSign(
+                                () -> expression
+                        )
+                )
+        ).evaluate();
+        double b = Math.pow(x, Math.log(x));
+        Assert.assertEquals(a, b);
     }
 }

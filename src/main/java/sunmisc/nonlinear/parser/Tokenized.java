@@ -1,52 +1,49 @@
 package sunmisc.nonlinear.parser;
 
 import sunmisc.nonlinear.Text;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Tokenized implements Iterable<String> {
+    private static final Pattern TOKEN_PATTERN = Pattern.compile(
+            "\\d+(\\.\\d*)?|[A-Za-z]+|[+\\-*/^()]|\\s+|."
+    );
     private final Text input;
-    public Tokenized(Text input) { this.input = input; }
+
+    public Tokenized(Text input) {
+        this.input = input;
+    }
 
     @Override
     public Iterator<String> iterator() {
         return new Iterator<>() {
-            private final String text = input.asString();
-            private int pos = 0;
+            private final Matcher matcher = TOKEN_PATTERN.matcher(input.asString());
+
             @Override
             public boolean hasNext() {
-                while (pos < text.length()) {
-                    char current = text.charAt(pos);
-                    switch (current) {
-                        case '+', '-', '/', '*', '^', '(', ')' -> {
-                            return true;
-                        }
-                        default -> {
-                            if (Character.isDigit(current) ||
-                                    Character.isLetter(current))
-                                return true;
-                            else
-                                pos++; // skip
-                        }
-                    }
+                while (matcher.find()) {
+                    String token = matcher.group();
+                    if (!token.matches("\\s+"))
+                        return true;
                 }
                 return false;
             }
 
             @Override
             public String next() {
-                char current = text.charAt(pos);
-                if (Character.isDigit(current)) {
-                    StringBuilder sb = new StringBuilder();
-                    while (pos < text.length() &&
-                            (Character.isDigit(text.charAt(pos)) ||
-                                    text.charAt(pos) == '.'))
-                        sb.append(text.charAt(pos++));
-
-                    return sb.toString();
-                } else
-                    pos++;
-                return String.valueOf(current);
+                String token = matcher.group();
+                if (token.matches("\\d+(\\.\\d*)?") ||
+                        token.matches("[A-Za-z]+") ||
+                        token.matches("[+\\-*/^()]")) {
+                    return token;
+                } else {
+                    throw new RuntimeException("Unexpected character: " + token);
+                }
             }
         };
     }
+
 }
