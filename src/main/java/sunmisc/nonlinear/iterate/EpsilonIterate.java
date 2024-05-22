@@ -1,18 +1,19 @@
 package sunmisc.nonlinear.iterate;
 
 import sunmisc.nonlinear.Cursor;
-
-import java.util.function.DoubleUnaryOperator;
+import sunmisc.nonlinear.math.Normalize;
+import sunmisc.nonlinear.math.Point;
+import java.util.function.Function;
 
 import static java.lang.Math.abs;
 
-public final class EpsilonIterate implements Cursor<Double> {
-    private final Cursor<Double> itr;
-    private final DoubleUnaryOperator origin;
+public final class EpsilonIterate implements Cursor<Point> {
+    private final Cursor<Point> itr;
+    private final Function<Point, Double> origin;
     private final double epsilon;
 
-    public EpsilonIterate(Cursor<Double> itr,
-                          DoubleUnaryOperator origin,
+    public EpsilonIterate(Cursor<Point> itr,
+                          Function<Point, Double> origin,
                           double epsilon) {
         this.itr = itr;
         this.origin = origin;
@@ -21,18 +22,19 @@ public final class EpsilonIterate implements Cursor<Double> {
 
     @Override
     public boolean exists() {
-        return itr.exists() && abs(
-                origin.applyAsDouble(itr.element())
-        ) > epsilon;
+        return itr.exists() &&
+                abs(
+                        origin.apply(itr.element())
+                ) > epsilon;
     }
 
     @Override
-    public Double element() {
+    public Point element() {
         return itr.element();
     }
 
     @Override
-    public Cursor<Double> next() {
+    public Cursor<Point> next() {
         return new EpsilonIterate(itr.next(), origin, epsilon);
     }
 }

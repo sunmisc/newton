@@ -1,15 +1,13 @@
 package sunmisc.nonlinear.parser;
 
 import sunmisc.nonlinear.Text;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Tokenized implements Iterable<String> {
     private static final Pattern TOKEN_PATTERN = Pattern.compile(
-            "\\d+(\\.\\d*)?|[A-Za-z]+|[+\\-*/^()]|\\s+|."
+            "\\d+(\\.\\d*)?|[A-Za-z][A-Za-z0-9]*|[+\\-*/^()]|\\s+|."
     );
     private final Text input;
 
@@ -34,16 +32,8 @@ public final class Tokenized implements Iterable<String> {
 
             @Override
             public String next() {
-                String token = matcher.group();
-                if (token.matches("\\d+(\\.\\d*)?") ||
-                        token.matches("[A-Za-z]+") ||
-                        token.matches("[+\\-*/^()]")) {
-                    return token;
-                } else {
-                    throw new RuntimeException("Unexpected character: " + token);
-                }
+                return matcher.group();
             }
         };
     }
-
 }

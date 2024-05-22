@@ -1,18 +1,26 @@
 package sunmisc.nonlinear.iterate;
 
 import sunmisc.nonlinear.Cursor;
-import sunmisc.nonlinear.DerivativeFunction;
+import sunmisc.nonlinear.math.*;
+import java.util.function.Function;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.DoubleUnaryOperator;
+public final class NewtonIterate implements Cursor<Point> {
+    private final Function<Point, Double> function;
+    private final Function<Point, Point> derivative;
+    private final Point x;
 
-public final class NewtonIterate implements Cursor<Double> {
-    private final DoubleUnaryOperator function, derivative;
-    private final double x;
+    public NewtonIterate(Function<Point, Double> function) {
+        this(function, new QPoint(0, 0));
+    }
 
-    public NewtonIterate(DoubleUnaryOperator function,
-                         DoubleUnaryOperator derivative,
-                         double initialGuess) {
+    public NewtonIterate(Function<Point, Double> function,
+                         Point initialGuess) {
+        this(function, new Gradient(function), initialGuess);
+    }
+
+    public NewtonIterate(Function<Point, Double> function,
+                         Function<Point, Point> derivative,
+                         Point initialGuess) {
         this.function = function;
         this.derivative = derivative;
         this.x = initialGuess;
@@ -20,33 +28,22 @@ public final class NewtonIterate implements Cursor<Double> {
 
     @Override public boolean exists() { return true; }
 
-    @Override public Double element() { return x; }
+    @Override public Point element() { return x; }
 
     @Override
-    public Cursor<Double> next() {
-        double fx = function.applyAsDouble(x);
-        double dfx = derivative.applyAsDouble(x);
+    public Cursor<Point> next() {
+        var hessian = new Hessian(function);
 
-        double deltaX = fx / dfx;
+        var delta = new LinearSolve(
+                hessian.apply(x)
+        ).apply(derivative.apply(x));
 
         return new NewtonIterate(
                 function,
                 derivative,
-                x - deltaX
+                new CachedPoint(
+                        new SubPoint(x, delta)
+                )
         );
-    }
-
-    public NewtonIterate(DoubleUnaryOperator function) {
-        this(function, new DerivativeFunction(function));
-    }
-    public NewtonIterate(DoubleUnaryOperator function, double x) {
-        this(function, new DerivativeFunction(function), x);
-    }
-
-    public NewtonIterate(DoubleUnaryOperator function,
-                         DoubleUnaryOperator derivative) {
-        this(function, derivative, ThreadLocalRandom
-                .current()
-                .nextDouble(0, 1));
     }
 }

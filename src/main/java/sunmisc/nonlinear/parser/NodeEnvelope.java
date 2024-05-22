@@ -3,7 +3,6 @@ package sunmisc.nonlinear.parser;
 import sunmisc.nonlinear.parser.nodes.Node;
 
 public class NodeEnvelope implements Node {
-
     private final Node origin;
 
     public NodeEnvelope(Node origin) {
@@ -18,10 +17,5 @@ public class NodeEnvelope implements Node {
     @Override
     public String asString() {
         return origin.asString();
-    }
-
-    @Override
-    public String toString() {
-        return origin.toString();
     }
 }
