@@ -17,3 +17,4 @@ public final class CosNode extends NodeEnvelope {
         });
     }
 }
+

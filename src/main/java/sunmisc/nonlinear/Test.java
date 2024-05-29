@@ -15,11 +15,12 @@ public class Test {
     public static void main(String[] args) {
         double x1 = 2, x2 = 12;
         String text = "x^2 - 2*x + 9 + 2 * y^2-8 * y";
+        Map<String, Node> map = Map.of(
+                "x", new NumberNode(x1),
+                "y", new NumberNode(x2)
+        );
         Node node = new Parsed(
-                Map.of(
-                        "x", new NumberNode(x1),
-                        "y", new NumberNode(x2)
-                ),
+                map::get,
                 new Tokenized(
                         new MultiplicationSign(
                                 () -> text

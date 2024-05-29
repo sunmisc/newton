@@ -1,37 +1,27 @@
 package sunmisc.nonlinear.math;
 
-import sunmisc.nonlinear.lazy.SimpleLazy;
+public final class CachedPoint extends PointEnvelope {
+    private final Point origin;
+    private Number[] cached;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
-public final class CachedPoint implements Point {
-    private final Supplier<Number[]> number;
-
-    public CachedPoint(Supplier<Number[]> point) {
-        this.number = point;
-    }
-
-    public CachedPoint(Point point) {
-        this.number = new SimpleLazy<>(point::point);
+    public CachedPoint(Point origin) {
+        this.origin = origin;
     }
 
     @Override
-    public Number[] point() {
-        return number.get();
+    public Number param(int i) {
+        final Number[] cs = cached();
+        final Number x = cs[i];
+        return x == null ? cs[i] = origin.param(i) : x;
     }
 
     @Override
-    public Point transform(int i, UnaryOperator<Double> f) {
-        Number[] copy = point().clone();
-        Number p = copy[i];
-        copy[i] = f.apply(p.doubleValue());
-        return new QPoint(copy);
+    public int length() {
+        return cached().length;
     }
 
-    @Override
-    public String toString() {
-        return Arrays.toString(point());
+    private Number[] cached() {
+        Number[] cs = cached;
+        return cs == null ? cached = new Number[origin.length()] : cs;
     }
 }

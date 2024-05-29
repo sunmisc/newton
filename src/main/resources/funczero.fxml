@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
 <VBox prefHeight="600.0" prefWidth="1200.0"
       xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="app.Controller">
@@ -25,8 +21,7 @@
                     <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
                 </textFill>
             </Label>
-            <Button fx:id="calculateButton"
-                    layoutX="14.0"
+            <Button layoutX="14.0"
                     layoutY="536.0"
                     mnemonicParsing="false"
                     onAction="#calculateClick"
@@ -54,64 +49,35 @@
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <TextField fx:id="derivative"
-                           prefHeight="26.0"
-                           prefWidth="66.0"
+                <TextField fx:id="function"
+                           prefHeight="18.0"
+                           prefWidth="58.0"
                            GridPane.columnIndex="1"
-                           GridPane.rowIndex="1"/>
+                           GridPane.rowIndex="0"/>
                 <TextField fx:id="epsilon"
                            prefHeight="26.0"
                            prefWidth="66.0"
                            GridPane.columnIndex="1"
-                           GridPane.rowIndex="2"/>
-                <Label text="epsilon:" GridPane.rowIndex="2"/>
-                <Label text="max итераций:" GridPane.rowIndex="3"/>
-                <TextField fx:id="function"
-                           prefHeight="18.0"
-                           prefWidth="58.0"
-                           GridPane.columnIndex="1"/>
+                           GridPane.rowIndex="1"/>
                 <TextField fx:id="maxIteration"
                            prefHeight="18.0"
                            prefWidth="42.0"
                            GridPane.columnIndex="1"
-                           GridPane.rowIndex="3"/>
-                <Label text="функция"/>
-                <Label text="производная (опционально)" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets/>
-                    </GridPane.margin>
-                </Label>
-                <Label text="начальная точка (опционально):" GridPane.rowIndex="4"/>
+                           GridPane.rowIndex="2"/>
                 <TextField fx:id="approximation"
                            GridPane.columnIndex="1"
-                           GridPane.rowIndex="4"/>
+                           GridPane.rowIndex="3"/>
+                <Label text="функция" GridPane.rowIndex="0"/>
+                <Label text="epsilon:" GridPane.rowIndex="1"/>
+                <Label text="max итераций:" GridPane.rowIndex="2"/>
+                <Label text="начальная точка (опционально):" GridPane.rowIndex="3"/>
             </GridPane>
         </AnchorPane>
-        <ScrollPane>
-            <AnchorPane id="Content" prefHeight="562.0" prefWidth="590.0">
-                <LineChart fx:id="funcChart"
-                           layoutX="-1.0"
-                           layoutY="97.0"
-                           prefHeight="445.0"
-                           prefWidth="444.0"
-                           AnchorPane.bottomAnchor="1.0"
-                           AnchorPane.leftAnchor="1.0"
-                           AnchorPane.rightAnchor="1.0"
-                           AnchorPane.topAnchor="39.0">
-                    <xAxis>
-                        <NumberAxis side="BOTTOM" fx:id="xAxis"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis fx:id="yAxis" side="LEFT"/>
-                    </yAxis>
-                </LineChart>
-            </AnchorPane>
-        </ScrollPane>
         <AnchorPane>
             <Label alignment="CENTER"
-                   font="$x1" layoutX="14.0"
+                   font="$x1"
+                   layoutX="14.0"
                    layoutY="14.0"
                    style="&#10;"
                    text="Расчеты"

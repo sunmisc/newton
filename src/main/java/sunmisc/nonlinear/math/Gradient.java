@@ -1,7 +1,5 @@
 package sunmisc.nonlinear.math;
 
-import sunmisc.nonlinear.lazy.SimpleLazy;
-
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -15,26 +13,20 @@ public final class Gradient implements UnaryOperator<Point> {
 
     @Override
     public Point apply(Point x) {
-
         return new CachedPoint(
-                new SimpleLazy<>(() -> {
-                    int n = x.length();
+                new PointEnvelope() {
+                    final double fx = function.apply(x);
+                    @Override
+                    public Number param(int i) {
+                        Point xh = x.transform(i, r -> r + H);
 
-                    final Number[] grad = new Number[n];
-                    double fx = function.apply(x);
-
-                    for (int i = 0; i < n; i++) {
-                        final int slot = i;
-                        grad[i] = new NumberEnvelope(
-                                new SimpleLazy<>(() -> {
-                                    Point xh = x.transform(slot, r -> r + H);
-
-                                    return (function.apply(xh) - fx) / H;
-                                })
-                        );
+                        return (function.apply(xh) - fx) / H;
                     }
-                    return grad;
-                })
+                    @Override
+                    public int length() {
+                        return x.length();
+                    }
+                }
         );
     }
 }

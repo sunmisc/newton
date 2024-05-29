@@ -26,3 +26,4 @@ public final class NumberNode extends NodeEnvelope {
         });
     }
 }
+

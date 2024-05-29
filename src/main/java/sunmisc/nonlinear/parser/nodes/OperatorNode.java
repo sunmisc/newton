@@ -7,16 +7,16 @@ public final class OperatorNode extends NodeEnvelope {
         super(new Node() {
             @Override
             public double evaluate() {
-                return (switch (operator) {
-                    case "+" -> new SumNode(left, right);
-                    case "-" -> new SubNode(left, right);
-                    case "*" -> new MultipleNode(left, right);
-                    case "/" -> new DivNode(left, right);
-                    case "^" -> new PowNode(left, right);
+                return switch (operator) {
+                    case "+" -> left.evaluate() + right.evaluate();
+                    case "-" -> left.evaluate() - right.evaluate();
+                    case "*" -> left.evaluate() * right.evaluate();
+                    case "/" -> left.evaluate() / right.evaluate();
+                    case "^" -> Math.pow(left.evaluate(), right.evaluate());
                     default -> throw new IllegalStateException(
                             "Unexpected value: " + operator
                     );
-                }).evaluate();
+                };
             }
 
             @Override
@@ -26,4 +26,5 @@ public final class OperatorNode extends NodeEnvelope {
         });
     }
 }
+
 

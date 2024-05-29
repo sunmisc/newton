@@ -1,6 +1,7 @@
 package sunmisc.nonlinear.parser;
 
 import sunmisc.nonlinear.Text;
+
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,12 +15,10 @@ public final class Tokenized implements Iterable<String> {
     public Tokenized(Text input) {
         this.input = input;
     }
-
     @Override
     public Iterator<String> iterator() {
         return new Iterator<>() {
             private final Matcher matcher = TOKEN_PATTERN.matcher(input.asString());
-
             @Override
             public boolean hasNext() {
                 while (matcher.find()) {
@@ -29,7 +28,6 @@ public final class Tokenized implements Iterable<String> {
                 }
                 return false;
             }
-
             @Override
             public String next() {
                 return matcher.group();

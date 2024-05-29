@@ -35,8 +35,9 @@ public class ParsedTest {
     @Test
     public void test2() {
         String text = "2^(6x-1)+23/x * 12 + 1 / x";
+
         DoubleUnaryOperator a = x -> new Parsed(
-                Map.of("x", new NumberNode(x)),
+                key -> new NumberNode(x),
                 new Tokenized(
                         new MultiplicationSign(
                                 () -> text
@@ -71,13 +72,16 @@ public class ParsedTest {
                             3 * (3 + (33 + (8 *(3+22*22+(sin(2)))/ 3) * 2) * 3) + 2 +
                             log(x*(2 + 1))^(2+44+(2*3)+(x+1+(3+2)))
                             """;
-        Parsed parsed1 = new Parsed(
-                Map.of("x", new NumberNode(x)),
+        Map<String, Node> map = Map.of(
+                "x", new NumberNode(x)
+        );
+        Node parsed = new Parsed(
+                map::get,
                 new Tokenized(() -> expression)
         );
 
 
-        double a = parsed1.evaluate();
+        double a = parsed.evaluate();
         double b = 3 * (3 + (33 + (8 *(3+22*22+(sin(2)))/ 3) * 2) * 3) + 2 + pow(
                 log(x * (2 + 1)), 2+44+(2*3)+(x+1+(3+2)));
 
@@ -87,8 +91,11 @@ public class ParsedTest {
     public void test5() {
         double x = 1222;
         String expression = "x^(log(x))";
+        Map<String, Node> map = Map.of(
+                "x", new NumberNode(x)
+        );
         double a = new Parsed(
-                Map.of("x", new NumberNode(x)),
+                map::get,
                 new Tokenized(
                         new MultiplicationSign(
                                 () -> expression

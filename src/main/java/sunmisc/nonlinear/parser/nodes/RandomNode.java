@@ -2,17 +2,19 @@ package sunmisc.nonlinear.parser.nodes;
 
 import sunmisc.nonlinear.parser.NodeEnvelope;
 
-public final class LogNode extends NodeEnvelope {
-    public LogNode(Node val) {
+import java.util.concurrent.ThreadLocalRandom;
+
+public final class RandomNode extends NodeEnvelope {
+    public RandomNode(double origin, double bound) {
         super(new Node() {
             @Override
             public double evaluate() {
-                return Math.log(val.evaluate());
+                return ThreadLocalRandom.current().nextDouble(origin, bound);
             }
 
             @Override
             public String asString() {
-                return String.format("log(%s)", val.asString());
+                return "random";
             }
         });
     }

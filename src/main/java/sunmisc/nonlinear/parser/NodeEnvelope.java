@@ -19,3 +19,4 @@ public class NodeEnvelope implements Node {
         return origin.asString();
     }
 }
+

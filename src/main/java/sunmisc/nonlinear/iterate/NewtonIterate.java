@@ -2,29 +2,15 @@ package sunmisc.nonlinear.iterate;
 
 import sunmisc.nonlinear.Cursor;
 import sunmisc.nonlinear.math.*;
+
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public final class NewtonIterate implements Cursor<Point> {
     private final Function<Point, Double> function;
     private final Function<Point, Point> derivative;
+    private final Function<Point, double[][]> hessian;
     private final Point x;
-
-    public NewtonIterate(Function<Point, Double> function) {
-        this(function, new QPoint(0, 0));
-    }
-
-    public NewtonIterate(Function<Point, Double> function,
-                         Point initialGuess) {
-        this(function, new Gradient(function), initialGuess);
-    }
-
-    public NewtonIterate(Function<Point, Double> function,
-                         Function<Point, Point> derivative,
-                         Point initialGuess) {
-        this.function = function;
-        this.derivative = derivative;
-        this.x = initialGuess;
-    }
 
     @Override public boolean exists() { return true; }
 
@@ -32,18 +18,39 @@ public final class NewtonIterate implements Cursor<Point> {
 
     @Override
     public Cursor<Point> next() {
-        var hessian = new Hessian(function);
-
-        var delta = new LinearSolve(
-                hessian.apply(x)
-        ).apply(derivative.apply(x));
-
-        return new NewtonIterate(
-                function,
-                derivative,
-                new CachedPoint(
-                        new SubPoint(x, delta)
-                )
+        final Point start = x, dx = derivative.apply(start);
+        final UnaryOperator<Point> delta = new LinearSolve(
+                hessian.apply(start)
         );
+        final Point next = new QPoint(
+                new SubPoint(
+                        start,
+                        delta.apply(dx)
+                ).toArray()
+        );
+        return new NewtonIterate(function, derivative, hessian, next);
+    }
+
+
+    public NewtonIterate(Function<Point, Double> function,
+                         Point initialGuess) {
+        this(function, new Hessian(function), initialGuess);
+    }
+
+    public NewtonIterate(Function<Point, Double> function,
+                         Function<Point, double[][]> hessian,
+                         Point initialGuess) {
+        this(function, new Gradient(function), hessian, initialGuess);
+    }
+
+    public NewtonIterate(Function<Point, Double> function,
+                         Function<Point, Point> derivative,
+                         Function<Point, double[][]> hessian,
+                         Point initialGuess) {
+        this.function = function;
+        this.derivative = derivative;
+        this.hessian = hessian;
+        this.x = initialGuess;
     }
 }
+

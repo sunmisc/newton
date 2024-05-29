@@ -7,8 +7,8 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import sunmisc.nonlinear.Cursor;
 import sunmisc.nonlinear.iterate.NewtonIterate;
-import sunmisc.nonlinear.math.QPoint;
 import sunmisc.nonlinear.math.Point;
+import sunmisc.nonlinear.math.QPoint;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +18,7 @@ import static java.lang.Math.pow;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode({Mode.Throughput})
 @Warmup(iterations = 2, time = 1)
-@Measurement(iterations = 5, time = 1)
+@Measurement(iterations = 50, time = 1)
 @Fork(1)
 @Threads(1)
 public class NewtonBench {
@@ -34,10 +34,9 @@ public class NewtonBench {
     public void next() {
         start = new NewtonIterate(
                 point -> {
-                    Number[] vls = point.point();
-                    return pow(vls[0].doubleValue(), 2) + vls[0].doubleValue() * 33;
+                    return pow(point.param(0).doubleValue(), 2)
+                            + point.param(0).doubleValue() * 33;
                 },
-                null,
                 new QPoint(1)
         );
 
